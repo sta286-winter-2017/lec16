@@ -1,0 +1,213 @@
+---
+title: "STA286 Lecture 15"
+author: "Neil Montgomery"
+date: "Last edited: `r format(Sys.time(), '%Y-%m-%d %H:%M')`"
+output: 
+  beamer_presentation:
+    keep_tex: TRUE
+    incremental: TRUE
+    df_print: tibble
+    fig_caption: FALSE
+classoption: aspectratio=169
+header-includes:
+- \renewcommand{\le}{\leqslant}
+- \renewcommand{\ge}{\geqslant}
+- \renewcommand\P[1]{P{\left(#1\right)}}
+- \newcommand\F[1]{F_{\tiny{#1}}}
+- \newcommand\f[1]{f_{\tiny{#1}}}
+- \newcommand\p[1]{p_{\tiny{#1}}}
+- \newcommand\M[1]{M_{\tiny{#1}}}
+- \newcommand\V[1]{\text{Var}\!\left(#1\right)}
+- \newcommand\E[1]{E\!\left(#1\right)}
+- \newcommand\N[1]{N_{\tiny{#1}}}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE)
+options(tibble.width=70)
+```
+
+## other Poisson distribution properties
+
+Suppose $X \sim \text{Poisson}(\lambda)$. Then (using $s$ as the meaningless "dummy" variable):
+
+\pause 
+
+$$\M{X}(s) = E(e^{sX}) = \sum_{k=0}^\infty e^{sk}\frac{\lambda^ke^{-\lambda}}{k!}=e^{-\lambda}\sum_{k=0}^\infty\frac{(e^s\lambda)^k}{k!} \onslide<3->{= e^{-\lambda}e^{e^s\lambda} = e^{\lambda(e^s-1)}}$$
+
+\pause\pause Then it's easy to show $E(X)=\lambda$ and $\V{X}=\lambda$.
+
+\pause Using full-blown Poisson process notation, we have that the expect value and the variance of the number of events in $[s,t]$ are both $\lambda(t-s)$.
+
+## Poisson - when did the event happen?
+
+In a Poisson process we might have observed that $N(t) = 1$. (We will condition on this fact throughout.)
+
+\pause When inside the interval $[0,t]$ did that single event occur?
+
+\pause The time when the event happened is a continuous random variable, which we can call $X$. What is it's distribution? 
+
+\pause We can derive its cumulative disribution function from first principles. We know $P(X \le x|N(t)=1) = 0$ for $x \le 0$ and $P(X \le x|N(t)=1) = 1$ for $x > t$. 
+
+## cdf of "the time when that one thing happened" - cont'
+
+Between 0 and $t$ we have:
+
+\begin{align*}
+P(X \le x | N(t) = 1) &= 1 - P(X > x | N(t) = 1)\\
+\onslide<2->{&= 1 - P(N(x) = 0 | N(t) = 1 )\\}
+\onslide<3->{&= 1 - \frac{P(N(x) = 0, N(t) = 1)}{P(N(t)=1)}\\}
+\onslide<4->{&= 1 - \frac{P(N(x) = 0, N(t) - N(x) = 1)}{P(N(t)=1)}\\}
+\onslide<5->{&= 1 - \frac{P(N(x) = 0)P(N(t) - N(x) = 1)}{P(N(t)=1)}\\}
+\onslide<6->{&= 1 - \frac{e^{-\lambda x} \lambda(t-x)e^{-\lambda(t-x)}}{\lambda t e^{-\lambda t}}\\}
+\onslide<7->{&= 1 - \frac{t-x}{t} = \frac{x}{t}}
+\end{align*}
+
+## density of "the time when that one thing happened"
+
+Putting it all together, the cdf of the time $X$ when the event occurred given $N(t)=1$ is:
+
+$$F_X(x) = \begin{cases}
+0 &: x \le 0\\
+\frac{x}{t} &: 0 < x \le t\\
+1 &: x > t
+\end{cases}$$
+
+\pause So the density is:
+$$\f{X}(x) = \frac{d}{dx} F_X(x) = \begin{cases}
+\frac{1}{t} &: 0 < x \le t\\
+0 &: \text{ otherwise}
+\end{cases}$$
+
+\pause The density is flat between 0 and $t$. We call this a "uniform distribution" between 0 and $t$. 
+
+## the uniform distributions
+
+The random variable $X$, the result of "picking a real number at random between $a$ and $b$", is modeled using a flat density:
+$$f(x) = \begin{cases}
+\frac{1}{b-a} &: a < x < b\\
+0 &: \text{ otherwise}
+\end{cases}$$
+
+\pause Easy to show $E(X) = (b-a)/2$ and $\V{X}=(b-a)^2/12$.
+
+\pause mgf is easy to determine, but not really useful for anything.
+
+\pause We say $X \sim \text{U}[a,b]$, with U$[0,1]$ an important special case.
+
+## Poisson approximation to binomial
+
+The limit $P(X(t)=k) \to P(N(t) = k)$ converges very fast, which means difficult Binomial calculations can be approximated very accurately using a Poisson probability calculations. 
+
+This was great in the 1960s, but not so important now. There is a discussion in the textbook and a handful of textbook exercises we'll call "optional" if you are intested. 
+
+## waiting time to the first event of a Poisson process
+
+In a Poisson process with rate $\lambda$, the first event will happen at some random time $X$. What is the distribution of $X$?
+
+We can derive the cdf from first principles by observing the following:
+$$P(X > t) = P(N(t) = 0)$$
+
+\pause The cdf is 0 for $t < 0$. Otherwise:
+$$F_X(t) = P(X \le t) = 1 - P(X > t) = 1 - P(N(t)=0)  \onslide<3->{=1 - \frac{(\lambda x)^0e^{-\lambda t}}{0!} = 1 - e^{-\lambda t}}$$
+ 
+\pause \pause The density is therefore 0 when $t<0$ and otherwise:
+$$\f{X}(t) = \lambda e^{-\lambda t}$$
+
+## the exponential distributions
+
+We say $X$ has an exponential distribution with rate $\lambda > 0$ when it has density $\f{X}(t) = \lambda e^{-\lambda t}$ for $t > 0$.
+
+\pause The m.g.f. is:
+$$\M{X}(s) = \int_0^\infty e^{st}\lambda e^{-\lambda t}\,dt = \frac{\lambda}{\lambda-s}$$
+
+\pause The mean and variance are $\frac{1}{\lambda}$ and $\frac{1}{\lambda^2}$
+
+\pause Exponential distributions have the \textit{memoryless} property, which is a crucial aspect of Poisson process as a model for "complete randomness". 
+
+\pause The Exponential distributions are the *only* (continuous) memoryless distributions.
+
+# DISASTROUS TREND SHOCKER PANIC HEADLINE
+
+## complete randomness is hard for humans
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+source("sim_proc.R")
+
+two_proc %>% 
+  ggplot(aes(x=S, y=Run)) + xlim(0, 20) + geom_point() + 
+  ylab("Replication") + xlab("\"Time\"") + theme_bw()
+
+```
+
+\pause Answer: `r shuffle[1:3]`
+
+
+## waiting time to the $n^{th}$ event of a Poisson process
+
+Let's say we have a Poisson process $N(t)$ with rate $\lambda$. The time of the ~~first~~ $n^{th}$ event is random. Call this time $X$.
+
+What can we say about $X$? Can we completely describe its distribution? 
+
+\pause Yes, because $F(t) = 1 - P(X > t)$, and $\{X > t\}$ *is exactly equivalent to*  $\{N(t) \le n-1\},$ so we can derive the cdf for $X$. 
+
+\pause $$F(t) = P(X \le t) = \begin{cases}
+0 &: t \le 0\\
+1 - \sum_{i=0}^{n-1} \frac{[\lambda t]^{i}}{i!}e^{-\lambda t} &: t > 0\\
+\end{cases}.$$
+
+
+\pause So the density is (a long telescoping sum of work later...):
+$$f(t) = F'(t) = \begin{cases}
+\frac{\lambda^n}{(n-1)!} t^{n-1} e^{-\lambda t} &: t > 0\\
+0 &: \text{otherwise}.
+\end{cases}$$
+
+## the gamma distributions
+
+The density is a special class of a larger family of distributions. 
+
+\pause Definition: the *gamma function* is defined as:
+$$\Gamma(\alpha) = \int_0^\infty u^{\alpha-1}e^{-u}\,du, \qquad \alpha > 0.$$
+Many interesting properties, including $\Gamma(n) = (n-1)!$ for integer $n\ge 1$.
+
+\pause The following function is a valid density for $\alpha > 0$ and $\lambda > 0$:
+$$f(x) = \begin{cases}
+\frac{\lambda^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\lambda x}
+&: x > 0\\
+0 &: \text{ otherwise}.\end{cases}$$
+
+\pause The parameters $\alpha$ and $\lambda$ are called the \textit{shape} and \text{scale} parameters. We say $X \sim \text{Gamma}(\alpha, \lambda)$
+
+\pause $\alpha=1$ is the special case of Exp$(\lambda)$.
+
+## pictures of some Gamma($\alpha$, 1) densities
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(dplyr)
+library(ggplot2)
+
+x <- seq(0,12, length.out = 1000)
+
+g_d <- rbind(data_frame(alpha=0.5, x, 'f(x)' = dgamma(x, 0.5, 1)),
+      data_frame(alpha = 1, x, 'f(x)' = dgamma(x, 1, 1)),
+      data_frame(alpha = 2, x, 'f(x)' = dgamma(x, 2, 1)),
+      data_frame(alpha = 5, x, 'f(x)' = dgamma(x, 5, 1)))
+
+g_d$alpha <- factor(g_d$alpha)
+
+ggplot(g_d, aes(x=x, y=`f(x)`, color = alpha)) + 
+  geom_line() + ylim(0,1.2) + theme_bw()
+```
+
+## properties of gamma distributions
+
+If $X \sim \text{Gamma}(\alpha, \lambda)$, its moment generating function can be found to be:
+$$\M{X}(s) = \left(\frac{\lambda}{\lambda-s}\right)^\alpha$$
+
+\pause (so the mean and variance are $\frac{\alpha}{\lambda}$ and $\frac{\alpha}{\lambda^2}$)
+
+\pause Suppose $X_1,X_2,\ldots,X_n$ are i.i.d. Exp$(\lambda)$. What is the distribution of $X = X_1 + X_2 + \cdots + X_n$?
+
+\pause Using the m.g.f. argument it is clear that $X \sim \text{Gamma}(n, \lambda)$, which makes sense in the Poisson process context.
