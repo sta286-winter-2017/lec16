@@ -89,7 +89,7 @@ $$f(x) = \begin{cases}
 0 &: \text{ otherwise}
 \end{cases}$$
 
-\pause Easy to show $E(X) = (b-a)/2$ and $\V{X}=(b-a)^2/12$.
+\pause Easy to show $E(X) = (a+b)/2$ and $\V{X}=(b-a)^2/12$.
 
 \pause mgf is easy to determine, but not really useful for anything.
 
