@@ -143,32 +143,7 @@ two_proc %>%
 \pause Answer: `r shuffle[1:3]`
 
 
-## waiting time to the $n^{th}$ event of a Poisson process
 
-Let's say we have a Poisson process $N(t)$ with rate $\lambda$. The time of the ~~first~~ $n^{th}$ event is random. Call this time $X$.
-
-What can we say about $X$? Can we completely describe its distribution? 
-
-\pause Yes, because $F(t) = 1 - P(X > t)$, and $\{X > t\}$ *is exactly equivalent to*  $\{N(t) \le n-1\},$ so we can derive the cdf for $X$. 
-
-\pause $$F(t) = P(X \le t) = \begin{cases}
-0 &: t \le 0\\
-1 - \sum_{i=0}^{n-1} \frac{[\lambda t]^{i}}{i!}e^{-\lambda t} &: t > 0\\
-\end{cases}.$$
-
-
-\pause So the density is (a long telescoping sum of work later...):
-$$f(t) = F'(t) = \begin{cases}
-\frac{\lambda^n}{(n-1)!} t^{n-1} e^{-\lambda t} &: t > 0\\
-0 &: \text{otherwise}.
-\end{cases}$$
-
-## the gamma distributions
-
-The density is a special class of a larger family of distributions. 
-
-\pause Definition: the *gamma function* is defined as:
-$$\Gamma(\alpha) = \int_0^\infty u^{\alpha-1}e^{-u}\,du, \qquad \alpha > 0.$$
 Many interesting properties, including $\Gamma(n) = (n-1)!$ for integer $n\ge 1$.
 
 \pause The following function is a valid density for $\alpha > 0$ and $\lambda > 0$:
