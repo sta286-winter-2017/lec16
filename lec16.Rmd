@@ -1,5 +1,5 @@
 ---
-title: "STA286 Lecture 15"
+title: "STA286 Lecture 16"
 author: "Neil Montgomery"
 date: "Last edited: `r format(Sys.time(), '%Y-%m-%d %H:%M')`"
 output: 
